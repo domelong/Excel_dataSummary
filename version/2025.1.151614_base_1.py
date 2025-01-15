@@ -8,7 +8,6 @@ class ExcelDataModel:
         self._path = _path
         self.workbook = opx.load_workbook(self._path,read_only=True,data_only=True)
 
-
     def getdata(self, area:dict) -> dict:
         """
         params: 
@@ -66,11 +65,12 @@ class ExcelDataModel:
 def test1():
     path = r".\res\数据源.xlsx"
     area = {
-        "片区1":"c5:c8",
-        "负责人1":"d5:d8",
-        "出勤人数1":"f5:f8",
-        "休息人数1":"f5:f8",
+        "项":"d5:d7",
+        "数量":"e5:e7",
+        "单价":"f5:f7",
+        "总价":"g5:g7",
     }
+    edm = ExcelDataModel(path)
     edm = ExcelDataModel(path)
     data = edm.getdata(area)
     edm.save_to_Excel(data)
