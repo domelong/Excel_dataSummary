@@ -13,7 +13,7 @@ class ExcelDataModel:
         params: 
         area: dict 一维字典
         """
-        if not isinstance(area, dict): raise Exception("area类型错误")
+        if not isinstance(area, dict): raise Exception("区域类型错误")
         data = {}
         for sheet in self.workbook.worksheets:
             sheetData = {}
@@ -23,19 +23,21 @@ class ExcelDataModel:
                 cellData = {}
                 cells = sheet[area[map]]
                 for celltuple in cells:
-                    cell = celltuple[0]
-                    celldatakey = map + "_" + str(cellindex)
-                    cellData[celldatakey] = cell.value
-                    cellindex += 1
+                    for cell in celltuple:
+                        if not isinstance(cell, opx.cell.read_only.ReadOnlyCell): continue
+                        celldatakey = map + "_" + str(cellindex)
+                        cellData[celldatakey] = cell.value
+                        cellindex += 1
                 sheetData[map] = cellData
             data[sheetname] = sheetData
         return data
 
-    def save_to_Excel(self, data):
+    def save_to_Excel(self, data:dict) -> None:
         """
         params:
         data: dict
         """
+        if not isinstance(data, dict): raise Exception("数据类型错误")
         wb = opx.Workbook()
         ws = wb.active
         ws.append([])
@@ -60,14 +62,17 @@ class ExcelDataModel:
                     ws.append(row)
         iter_data(data)
         wb.save(r".\newfile.xlsx")
-        return datalist
         
-if __name__ == '__main__':
-    path = r".\res\数据源.xlsx"
+
+def test1():
+    path = r".\res\数据源_test1.xlsx"
     # 以单维字典 { 字段名:区域 } 的格式声明区域
     area = {
-        "项":"d5:d7",
+        "项":"d5:g7",
     }
     edm = ExcelDataModel(path)
     data = edm.getdata(area)
     edm.save_to_Excel(data)
+
+if __name__ == '__main__':
+    test1()
