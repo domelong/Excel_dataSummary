@@ -62,18 +62,12 @@ class ExcelDataModel:
         wb.save(r".\newfile.xlsx")
         return datalist
         
-def test1():
+if __name__ == '__main__':
     path = r".\res\数据源.xlsx"
+    # 以单维字典 { 项:区域 } 的格式声明
     area = {
         "项":"d5:d7",
     }
     edm = ExcelDataModel(path)
-    edm = ExcelDataModel(path)
     data = edm.getdata(area)
     edm.save_to_Excel(data)
-
-def test2(): data = [i for i in range(10)]
-    
-
-if __name__ == '__main__':
-    test1()
