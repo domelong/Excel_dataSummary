@@ -66,9 +66,6 @@ def test1():
     path = r".\res\数据源.xlsx"
     area = {
         "项":"d5:d7",
-        "数量":"e5:e7",
-        "单价":"f5:f7",
-        "总价":"g5:g7",
     }
     edm = ExcelDataModel(path)
     edm = ExcelDataModel(path)
