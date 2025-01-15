@@ -63,12 +63,12 @@ class ExcelDataModel:
         wb.save(r".\newfile.xlsx")
         
 def test1():
-    path = r"C:\Users\d'm'l\Desktop\PythonTree\项目\25.1.12关于单工作簿多工作表同一区域零散数据汇总的解决方式\res\到达白班24年1至6月数据汇总.xlsx"
+    path = r"C:\Users\d'm'l\Desktop\PythonTree\数据源.xlsx"
     area = {
-        "片区1":"c5:c8",
-        "负责人1":"d5:d8",
-        "出勤人数1":"f5:f8",
-        "休息人数1":"f5:f8",
+        "项":"d5:d7",
+        "数量":"e5:e7",
+        "单价":"f5:f7",
+        "总价":"g5:g7",
         }
     ex = ExcelDataModel(path)
     data = ex.getdata2dict(area)
