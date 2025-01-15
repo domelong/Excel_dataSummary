@@ -64,7 +64,7 @@ class ExcelDataModel:
         
 if __name__ == '__main__':
     path = r".\res\数据源.xlsx"
-    # 以单维字典 { 项:区域 } 的格式声明
+    # 以单维字典 { 字段名:区域 } 的格式声明区域
     area = {
         "项":"d5:d7",
     }
