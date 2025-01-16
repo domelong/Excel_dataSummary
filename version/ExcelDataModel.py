@@ -1,21 +1,26 @@
 import openpyxl as opx
+import os
 
 class ExcelDataModel:
-    def __init__(self, _path) -> None:
+    def __init__(self, path) -> None:
         """
         ExcelDataModel 数据模型对象 数据获取 数据分析
         """
-        self._path = _path
+        self._path = path
         self.workbook = opx.load_workbook(self._path,read_only=True,data_only=True)
 
-    def getdata(self, area:dict) -> dict:
+    def getdata(self, area:dict, sheets=[]) -> dict:
         """
         params: 
         area: dict 一维字典
+        sheets: list 工作表名称列表
         """
-        if not isinstance(area, dict): raise Exception("区域类型错误")
+        if not isinstance(area, dict): raise Exception("area参数类型错误")
+        if not isinstance(sheets, list): raise Exception("sheets参数类型错误")
+        if sheets: thissheets = [self.workbook[sheetname] for sheetname in sheets]
+        else: thissheets = self.workbook.worksheets 
         data = {}
-        for sheet in self.workbook.worksheets:
+        for sheet in thissheets:
             sheetData = {}
             sheetname = sheet.title
             for map in area:
@@ -32,12 +37,12 @@ class ExcelDataModel:
             data[sheetname] = sheetData
         return data
 
-    def save_to_Excel(self, data:dict) -> None:
+    def save_to_Excel(self, data:dict) -> list:
         """
         params:
         data: dict
         """
-        if not isinstance(data, dict): raise Exception("数据类型错误")
+        if not isinstance(data, dict): raise Exception("data数据类型错误")
         wb = opx.Workbook()
         ws = wb.active
         ws.append([])
@@ -62,16 +67,24 @@ class ExcelDataModel:
                     ws.append(row)
         iter_data(data)
         wb.save(r".\newfile.xlsx")
-        
+        return datalist
+    
+    def getdata_for_workbooks(self, path:str):
+        """
+        params:
+        path: str 多工作簿的目标文件夹
+        """
+
+        pass
 
 def test1():
-    path = r".\res\数据源_test1.xlsx"
+    path = r".\res"
     # 以单维字典 { 字段名:区域 } 的格式声明区域
     area = {
         "项":"d5:g7",
     }
     edm = ExcelDataModel(path)
-    data = edm.getdata(area)
+    data = edm.getdata(area, ["2025.1.1", "2025.1.2"])
     edm.save_to_Excel(data)
 
 if __name__ == '__main__':
