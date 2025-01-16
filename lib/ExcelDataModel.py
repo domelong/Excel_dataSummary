@@ -9,16 +9,17 @@ class ExcelDataModel:
         self.workbook = workbook
 
     # 获取单工作簿多工作表数据
-    def getdata(self, workbook:opx.Workbook, area:dict, sheets=[]) -> dict:
+    def getdata(self, path, area:dict, sheets=[]) -> dict:
         """
         params: 
-        workbook: opx.Workbook workbook对象
+        path: str 文件路径
         area: dict 一维字典
         sheets: list 工作表名称列表
         """
-        if not isinstance(workbook, opx.Workbook): raise Exception("workbook参数类型应为workbook对象")
+        if not os.path.isfile(path): raise Exception(f"{path}不是一个文件")
         if not isinstance(area, dict): raise Exception("area参数类型应为一维dict对象")
         if not isinstance(sheets, list): raise Exception("sheets参数类型应为一维list对象")
+        workbook = opx.load_workbook(path, read_only=True, data_only=True)
         if sheets: thissheets = [workbook[sheetname] for sheetname in sheets]
         else: thissheets = workbook.worksheets 
         data = {}
@@ -48,11 +49,10 @@ class ExcelDataModel:
         filename: list 工作簿名称列表
         sheets: list 工作表名称列表
         """
-        isfile = os.path.isfile(path)
         if not isinstance(area, dict): raise Exception("area参数类型应为一维dict对象")
         if not isinstance(filenames, list): raise Exception("filenames参数类型应为一维list对象")
         if not isinstance(sheets, list): raise Exception("sheets参数类型应为一维list对象")
-        if isfile: raise Exception("目标路径应为文件夹而不是文件")
+        if os.path.isfile(path): raise Exception("目标路径应为文件夹而不是文件")
         filepaths = []
         datalist = []
         listdir = filenames or os.listdir(path)
@@ -60,20 +60,19 @@ class ExcelDataModel:
             filepath = path + "\\" + filename 
             if os.path.exists(filepath) and os.path.isfile(filepath):
                 filepaths.append(filepath)
-                wb = opx.load_workbook(filepath, read_only=True, data_only=True)
-                data = self.getdata(wb, area, sheets)
+                data = self.getdata(filepath, area, sheets)
                 datalist.append(data)
             else: continue
         return datalist
 
+    # 以newfile.xlsx保存在本地
     def save_to_Excel(self, datalist) -> None:
         """
         params:
-        data: list
+        datalist: list
         """
         if not isinstance(datalist, list): datalist = [datalist]
         wb = self.workbook
-        wb.create_sheet("newSheet")
         ws = wb.active
         ws.append([])
         def iter_data(dictionary, path=[]):
@@ -98,20 +97,24 @@ class ExcelDataModel:
         wb.save(r".\newfile.xlsx")
 
 def test1():
-    path = r".\res\数据源_test1.xlsx"
-    wb = opx.load_workbook(path)
-    # path = r".\res"
+    path = r".\res"
     # 以单维字典 { 字段名:区域 } 的格式声明区域
     area = {
         "项":"d5:g7",
     }
     edm = ExcelDataModel()
-    data = edm.getdata(wb, area)
+    data = edm.getdata_for_workbooks(path, area)
     edm.save_to_Excel(data)
 
 def test2():
-    ws = opx.Workbook().active
-    cell = ws["a1"]
-    print(isinstance(cell, opx.cell.cell.Cell))
+    path = r".\res\数据源_test1.xlsx"
+    # 以单维字典 { 字段名:区域 } 的格式声明区域
+    area = {
+        "项":"d5:g7",
+    }
+    edm = ExcelDataModel()
+    data = edm.getdata(path, area)
+    edm.save_to_Excel(data)
+
 if __name__ == '__main__':
     test1()

@@ -1,4 +1,4 @@
-from version.ExcelDataModel import ExcelDataModel
+from lib.ExcelDataModel import ExcelDataModel
 
 def test1():
     path = r".\res"
