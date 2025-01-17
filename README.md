@@ -1,4 +1,22 @@
-# excel汇总 
+# excel汇总
+### 目标:
+1. 
+---
+# excel拆分
+### 目标:
+1. 以目标工作簿为模板创建多工作表
+---
+# excel操作
+### 目标:
+1. 批量 数据删除 数据换位 数据匹配
+---
+### 日志:
+1. 2025.1.15新增功能 同一工作簿下多工作表同一区域数据汇总 
+2. 2025.1.16 15:21新增功能 多工作簿数据汇总成单工作簿单工作表 
+*ps: 本来是想汇总成多工作簿多工作表 但是后来想想没必要 既然是数据汇总再拆分成多工作表意义不大 哈哈*
+3. 2025.1.17 13:18新增功能 工作簿内多工作表数据拆分成多工作簿、
+---
+### 依赖: openpyxl 只支持.xlsx .xlrd
 ### ExcelDataModel(Excel数据模型对象)
 ### 属性:
 1. workbook: openpyxl.Workbook对象
@@ -17,21 +35,8 @@
 3. save_to_Excel(datalist)
     *datalist: list 列表 元素为由getdata创建的dict*
     </br>
-4. split_sheets_to_workbooks(path, startindex=1, endindex=None)
+4. splitsheets_saveto_workbooks(path, startindex=1, endindex=None)
     *path: str 文件路径*
     *startindex: int 起始索引*
     *endindex: int 结束索引*
-### 目标:
-1. 
-### 日志:
-1. 2025.1.15新增功能 同一工作簿下多工作表同一区域数据汇总 
-2. 2025.1.16 15:21新增功能 多工作簿数据汇总成单工作簿单工作表 
-*ps: 本来是想汇总成多工作簿多工作表 但是后来想想没必要 既然是数据汇总再拆分成多工作表意义不大 哈哈*
-3.
----
-# excel拆分
-### 目标:
-1. 以目标工作簿为模板创建多工作表
-### 日志:
-1. 2025.1.17 13:18新增功能 工作簿内多工作表数据拆分成多工作簿
-### 依赖: openpyxl 只支持.xlsx .xlrd
+

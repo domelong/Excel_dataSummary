@@ -99,7 +99,7 @@ class ExcelDataModel:
         wb.save(r".\newfile.xlsx")
     
     # 工作簿内多工作表数据拆分成多工作簿
-    def split_sheets_to_workbooks(self, path, startindex=1, endindex=None):
+    def splitsheets_saveto_workbooks(self, path, startindex=1, endindex=None):
         """
         params:
         path: str 目标文件路径
@@ -143,7 +143,7 @@ class ExcelDataModel:
             newwb.save(f"./{newfolder}/{newfilename}")
             count += 1
  
-def test1():
+def getdata_for_workbooks_test():
     path = r".\res"
     # 以单维字典 { 字段名:区域 } 的格式声明区域
     area = {
@@ -153,7 +153,7 @@ def test1():
     data = edm.getdata_for_workbooks(path, area)
     edm.save_to_Excel(data)
 
-def test2():
+def getdata_test():
     path = r".\res\数据源_test1.xlsx"
     # 以单维字典 { 字段名:区域 } 的格式声明区域
     area = {
@@ -163,11 +163,11 @@ def test2():
     data = edm.getdata(path, area)
     edm.save_to_Excel(data)
 
-def test3():
+def splitsheets_saveto_workbooks_test():
     path = r".\res\数据源_test1.xlsx"
     # 以单维字典 { 字段名:区域 } 的格式声明区域
     edm = ExcelDataModel()
     edm.split_sheets_to_workbooks(path)
 
 if __name__ == '__main__':
-    test3()
+    splitsheets_saveto_workbooks_test()
