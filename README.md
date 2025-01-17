@@ -16,7 +16,11 @@
     </br>
 3. save_to_Excel(datalist)
     *datalist: list 列表 元素为由getdata创建的dict*
-
+    </br>
+4. split_sheets_to_workbooks(path, startindex=1, endindex=None)
+    *path: str 文件路径*
+    *startindex: int 起始索引*
+    *endindex: int 结束索引*
 ### 目标:
 1. 
 ### 日志:
@@ -27,8 +31,7 @@
 ---
 # excel拆分
 ### 目标:
-1. 工作表数据拆分成多工作簿|工作表
-2. 以目标工作簿为模板创建多工作簿|工作表
+1. 以目标工作簿为模板创建多工作表
 ### 日志:
-1.
+1. 2025.1.17 13:18新增功能 工作簿内多工作表数据拆分成多工作簿
 ### 依赖: openpyxl 只支持.xlsx .xlrd

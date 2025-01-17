@@ -7,6 +7,7 @@ class ExcelDataModel:
         ExcelDataModel 数据模型对象 数据获取 数据分析
         """
         self.workbook = workbook
+        self.fileExtension = (".xlsx", ".xlrd")
 
     # 获取单工作簿多工作表数据
     def getdata(self, path, area:dict, sheets=[]) -> dict:
@@ -95,7 +96,40 @@ class ExcelDataModel:
                     ws.append(row)
         for data in datalist: iter_data(data)
         wb.save(r".\newfile.xlsx")
-
+    
+    # 工作簿内多工作表数据拆分成多工作簿
+    def split_sheets_to_workbooks(self, path, startindex=1, endindex=None):
+        """
+        params:
+        path: str 目标文件路径
+        startindex: int 起始索引
+        endindex: int 结束索引
+        """
+        if not os.path.isfile(path): raise Exception("路径不是个文件")
+        self.workbook = opx.load_workbook(path)
+        wb = self.workbook
+        worksheets = wb.worksheets
+        endindex = endindex or len(worksheets)
+        if startindex >= endindex: raise Exception("startindex参数不能大于endindex")
+        worksheets = worksheets[(startindex - 1):endindex]
+        filename = os.path.basename(path)
+        os.mkdir(r".\newfiles")
+        count = 1
+        for sheet in worksheets:
+            newwb = opx.Workbook()
+            newsheetname = sheet.title
+            newsheet = newwb.active
+            newsheet.title = newsheetname
+            for row in sheet.iter_rows():
+                for cell in row:
+                    rowindex = cell.row
+                    colindex = cell.column
+                    value = cell.value
+                    newsheet.cell(rowindex, colindex, value)
+            newfilename =  f"{count}_" + newsheetname + filename
+            newwb.save(f"./newfiles/{newfilename}")
+            count += 1
+ 
 def test1():
     path = r".\res"
     # 以单维字典 { 字段名:区域 } 的格式声明区域
@@ -116,5 +150,11 @@ def test2():
     data = edm.getdata(path, area)
     edm.save_to_Excel(data)
 
+def test3():
+    path = r".\res\数据源_test1.xlsx"
+    # 以单维字典 { 字段名:区域 } 的格式声明区域
+    edm = ExcelDataModel()
+    edm.split_sheets_to_workbooks(path)
+
 if __name__ == '__main__':
-    test1()
+    test3()
