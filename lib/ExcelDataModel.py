@@ -1,5 +1,6 @@
 import openpyxl as opx
 import os
+import time
 
 class ExcelDataModel:
     def __init__(self, workbook=opx.Workbook()) -> None:
@@ -113,21 +114,33 @@ class ExcelDataModel:
         if startindex >= endindex: raise Exception("startindex参数不能大于endindex")
         worksheets = worksheets[(startindex - 1):endindex]
         filename = os.path.basename(path)
-        os.mkdir(r".\newfiles")
+        timestamp = time.strftime("%Y_%m_%d_%H%M%S", time.localtime())
+        newfolder = r".\newfiles" + timestamp
+        os.mkdir(newfolder)
         count = 1
         for sheet in worksheets:
             newwb = opx.Workbook()
             newsheetname = sheet.title
             newsheet = newwb.active
             newsheet.title = newsheetname
+            # 1. 数据先加进去
             for row in sheet.iter_rows():
                 for cell in row:
                     rowindex = cell.row
                     colindex = cell.column
                     value = cell.value
                     newsheet.cell(rowindex, colindex, value)
+
+            # 2. 处理合并单元格
+            sheet_merged_cells = sheet.merged_cells.ranges
+            if sheet_merged_cells:
+                for merged_cell in sheet_merged_cells:
+                    newsheet.merge_cells(str(merged_cell))
+            
+            # 3. 处理样式 有点麻烦 先放放吧
+
             newfilename =  f"{count}_" + newsheetname + filename
-            newwb.save(f"./newfiles/{newfilename}")
+            newwb.save(f"./{newfolder}/{newfilename}")
             count += 1
  
 def test1():
