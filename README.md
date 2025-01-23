@@ -19,24 +19,4 @@
 # ExcelDataModel(Excel数据模型对象)
 ### 依赖: openpyxl 只支持.xlsx .xlrd
 ### 属性:
-1. workbook: openpyxl.Workbook对象
 ### 方法:
-1. getdata(path, area, sheets=[]) -> dict
-    *path: str 文件路径*
-    *area: dict 一维字典 区域映射*
-    *sheets: list 一维列表 工作表名称列表*
-    </br>
-2. getdata_for_workbooks(path, area, filenames=[], sheets=[]) -> list
-    *path: str 文件路径*
-    *area: dict 一维字典*
-    *filenames: list 一维列表 文件名列表*
-    *sheets: list 一维列表 工作表名称列表*
-    </br>
-3. save_to_Excel(datalist)
-    *datalist: list 列表 元素为由getdata创建的dict*
-    </br>
-4. splitsheets_saveto_workbooks(path, startindex=1, endindex=None)
-    *path: str 文件路径*
-    *startindex: int 起始索引*
-    *endindex: int 结束索引*
-
